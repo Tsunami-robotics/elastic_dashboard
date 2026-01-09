@@ -6,19 +6,23 @@ Widgets are the cards on the grid that display information about the robot.
 
 On the menu bar at the top of the screen, there is a button that says "Add Widget" with a **+**. Clicking it will open the widget dialog, which will look like this. You must be connected to your robot in order for tiles to appear.
 
-![Widget Dialog](../.gitbook/assets/dialog\_collapsed.png)
+![Widget Dialog](../.gitbook/assets/dialog_collapsed.png)
 
 By clicking on each table name, you will reveal any sub-tables that Network Tables has.
 
-![Sub-Tables](../.gitbook/assets/dialog\_expanded.png)
+![Sub-Tables](../.gitbook/assets/dialog_expanded.png)
+
+If a topic is a struct type, Elastic will decode the struct and allow you to display individual fields from it. For example, a ChassisSpeeds struct has vx, vy, and omea fields.
+
+<figure><img src="../.gitbook/assets/Displaying Structs.png" alt="Displaying Struct Fields"><figcaption><p>Displaying Struct Fields</p></figcaption></figure>
 
 To make finding the data you want to display easier, you can type a search query into the search box at the bottom of the dialog. This will only display values that match the search query.
 
-![Search Query](../.gitbook/assets/dialog\_search.png)
+![Search Query](../.gitbook/assets/dialog_search.png)
 
-When you find the data for the widget you would like to add, simply click on it, and drag it to the location you want to place the widget. A red or green outline will appear indicating weather or not the location you are hovering on is a valid location.
+When you find the data for the widget you would like to add, simply click on it, and drag it to the location you want to place the widget. A red or green outline will appear, indicating whether or not the location you are hovering on is valid.
 
-![Dragging a Widget to the Grid](../.gitbook/assets/dialog\_dragging.png)
+![Dragging a Widget to the Grid](../.gitbook/assets/dialog_dragging.png)
 
 A widget will be dragged only if there is a valid type for that widget. For example, if you try to drag a boolean value from the dialog, a boolean box will be dragged by your mouse cursor. If you drag a table such as `/Shuffleboard`, which does not have a data type property to it, nothing will appear under your mouse cursor.
 
@@ -26,17 +30,17 @@ When you let go of your mouse, the widget will be added to the grid.
 
 After you place a widget on the grid, you can resize it by dragging the edges of the widget's box.
 
-![Resizing a Widget](../.gitbook/assets/dialog\_resizing.png)
+![Resizing a Widget](../.gitbook/assets/dialog_resizing.png)
 
 ### Customizing Widgets
 
 When you right click on a widget container (the card that holds the widget), a context menu will appear with several options: `Edit Properties`, or `Remove`.
 
-![Right Click Menu](../.gitbook/assets/context\_menu.png)
+![Right Click Menu](../.gitbook/assets/context_menu.png)
 
 Clicking `Remove` will remove the widget from the grid, and clicking `Edit Properties` will open a menu with several customization options.
 
-![Edit Properties Menu](../.gitbook/assets/properties\_menu.png)
+![Edit Properties Menu](../.gitbook/assets/properties_menu.png)
 
 Every widget will have `Container Settings` and `Network Tables Settings`. The container settings allow you to change the title and widget type. Depending on what type of data you are displaying, you are able to change the widget type. You must be connected to your robot for any additional options to appear.
 
@@ -48,21 +52,21 @@ Under `Network Tables Settings`, there will be several advanced settings allowin
 
 This gif is an example of how to add a widget. This adds a widget that displays the voltage, and changes a few of its settings.
 
-![Adding Voltage Example](../.gitbook/assets/adding\_voltage.gif)
+![Adding Voltage Example](../.gitbook/assets/adding_voltage.gif)
 
 ### Copying and Pasting Widgets
 
-Elastic supports copying and pasting widgets and layouts between different tabs. When right clicking on a widget, there is an option to copy it to the clipboard.
+Elastic supports copying and pasting widgets and layouts between different tabs. When right-clicking on a widget, there is an option to copy it to the clipboard.
 
 _Note: This is separate from the system clipboard_
 
-![Copying Widget](../.gitbook/assets/copying\_widget.png)
+![Copying Widget](../.gitbook/assets/copying_widget.png)
 
-Right clicking in an empty spot will show a button to paste the widget. This will attempt to insert the widget into the grid with the top left corner of the widget in the grid space that the cursor is hovering in. If the widget does not fit on the grid, then it will not paste.
+Right-clicking in an empty spot will show a button to paste the widget. This will attempt to insert the widget into the grid with the top left corner of the widget in the grid space that the cursor is hovering in. If the widget does not fit on the grid, then it will not paste.
 
-![Pasting Widget](../.gitbook/assets/pasting\_widget.png)
+![Pasting Widget](../.gitbook/assets/pasting_widget.png)
 
-![Widget After Pasting](../.gitbook/assets/widget\_after\_pasting.png)
+![Widget After Pasting](../.gitbook/assets/widget_after_pasting.png)
 
 ### Camera Streams
 
@@ -74,4 +78,4 @@ CameraServer.startAutomaticCapture();
 
 To add a camera stream, navigate to the `CameraPublisher` table, and there will be different tables for different camera streams that can be viewed. Dragging one of these tables will create a Camera Stream widget that displays live video from the camera.
 
-![Adding Camera Stream](../.gitbook/assets/camera\_stream.png)
+![Adding Camera Stream](../.gitbook/assets/camera_stream.png)

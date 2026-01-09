@@ -46,8 +46,8 @@ Next, you will have to deploy the Elastic configuration file to your robot:
 The exported file must end in ".json" and should be placed in the root directory of your deploy folder, the deploy folder structure should look like this:
 
 /deploy\
-&#x20;   elastic-layout.json\
-&#x20;   ...
+elastic-layout.json\
+...
 {% endhint %}
 
 ## Downloading Your Layout
@@ -97,16 +97,3 @@ Deletes the existing layout and loads the new one.
 This is the same operation as opening a new layout locally, any widgets you have placed will be removed.
 
 </details>
-
-## Shuffleboard API Migration Guide
-
-### Code-Driven Layouts
-
-Migrating Shuffleboard API layouts to remote downloading layouts is simple:
-
-1. Clear all tabs and widgets of your dashboard, it is recommended you save your layout to a safe location before doing this step
-2. Connect to your robot to populate Elastic with the code-driven layout
-3. Export your dashboard layout
-4. Set up the remote layout downloading as described [here](remote-layout-downloading.md#on-robot-configuration)
-
-After migrating your layout, it is advised to remove any Shuffleboard API-related code from your robot project.

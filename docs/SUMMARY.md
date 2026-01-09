@@ -19,9 +19,13 @@
 * [ElasticLib](additional-features-and-references/robot-notifications-with-elasticlib.md)
 * [Remote Layout Downloading](additional-features-and-references/remote-layout-downloading.md)
 * [Custom Widget Examples](additional-features-and-references/custom-widget-examples.md)
-* [Shuffleboard API](additional-features-and-references/shuffleboard-api-integration.md)
 
 ## Legal
 
 * [Open Source License](legal/open-source-license.md)
 * [Privacy Policy](legal/privacy-policy.md)
+
+## Legacy
+
+* [Shuffleboard API](legacy/shuffleboard-api-integration.md)
+* [Shuffleboard API Migration](legacy/shuffleboard-api-migration.md)

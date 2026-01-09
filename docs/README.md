@@ -4,9 +4,9 @@ icon: house
 
 # Home
 
-Elastic is a simple and modern dashboard for FRC. It was built with the goal of being a drag & drop dashboard with an easy setup and elegant UI designed for a high pressure competition environment.
+Elastic is a simple and modern dashboard for FRC. It was built with the goal of being a drag & drop dashboard with an easy setup and elegant UI designed for a high-pressure competition environment.
 
-<figure><img src=".gitbook/assets/example_layout.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/2026 Demo.png" alt=""><figcaption></figcaption></figure>
 
 ### Getting Started
 
@@ -18,4 +18,4 @@ Elastic is a simple and modern dashboard for FRC. It was built with the goal of 
 
 ### Features & References
 
-<table data-view="cards"><thead><tr><th></th><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td>Widgets List &#x26; Properties Reference</td><td></td><td></td><td><a href="additional-features-and-references/widgets-list-and-properties-reference.md">widgets-list-and-properties-reference.md</a></td></tr><tr><td>Shuffleboard API Integration</td><td></td><td></td><td><a href="additional-features-and-references/shuffleboard-api-integration.md">shuffleboard-api-integration.md</a></td></tr><tr><td>Robot Notifications</td><td></td><td></td><td><a href="additional-features-and-references/robot-notifications-with-elasticlib.md">robot-notifications-with-elasticlib.md</a></td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td>Widgets List &#x26; Properties Reference</td><td></td><td></td><td><a href="additional-features-and-references/widgets-list-and-properties-reference.md">widgets-list-and-properties-reference.md</a></td></tr><tr><td>Shuffleboard API Integration</td><td></td><td></td><td><a href="legacy/shuffleboard-api-integration.md">shuffleboard-api-integration.md</a></td></tr><tr><td>Robot Notifications</td><td></td><td></td><td><a href="additional-features-and-references/robot-notifications-with-elasticlib.md">robot-notifications-with-elasticlib.md</a></td></tr></tbody></table>
