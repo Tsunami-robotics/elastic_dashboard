@@ -301,15 +301,30 @@ class FieldWidget extends NTWidget {
 
   void _publishPoseToNT(FieldWidgetModel model, double x, double y, [double angle = 0.0]) {
 
-    final topicName = '${model.topic}/${model.clickPositionName}';
+    // position
 
-    final topic = model.ntConnection.getTopicFromName(topicName) ??
+    final poseTopicName = '${model.topic}/${model.clickPositionName}';
+
+    final poseTopic = model.ntConnection.getTopicFromName(poseTopicName) ??
         model.ntConnection.publishNewTopic(
-          topicName,
+          poseTopicName,
           NT4Type.array(NT4Type.double()),
         );
 
-    model.ntConnection.ntClient.addSample(topic, [x, y, angle]);
+    model.ntConnection.updateDataFromTopic(poseTopic, [x, y, angle]);
+
+    // command
+
+    final commandTopicName = '${model.onClickCommandTopic}/running';
+
+    final commandTopic = model.ntConnection.getTopicFromName(commandTopicName) ??
+        model.ntConnection.publishNewTopic(
+          commandTopicName,
+          NT4Type.boolean(),
+        );
+
+    model.ntConnection.publishTopic(commandTopic);
+    model.ntConnection.updateDataFromTopic(commandTopic, true);
   }
 
   @override

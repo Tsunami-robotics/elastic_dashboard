@@ -11,7 +11,7 @@ typedef SubscriptionIdentification = ({
 });
 
 class NTConnection {
-  late NT4Client ntClient;
+  late NT4Client _ntClient;
   late DSInteropClient _dsClient;
   final SchemaManager schemaManager = SchemaManager();
 
@@ -28,13 +28,13 @@ class NTConnection {
   ValueNotifier<bool> get dsConnected => _dsConnected;
   DSInteropClient get dsClient => _dsClient;
 
-  int get serverTime => ntClient.getServerTimeUS();
+  int get serverTime => _ntClient.getServerTimeUS();
 
   @visibleForTesting
   List<NT4Subscription> get subscriptions => subscriptionUseCount.keys.toList();
 
   @visibleForTesting
-  String get serverBaseAddress => ntClient.serverBaseAddress;
+  String get serverBaseAddress => _ntClient.serverBaseAddress;
 
   Map<int, NT4Subscription> subscriptionMap = {};
   Map<NT4Subscription, int> subscriptionUseCount = {};
@@ -44,7 +44,7 @@ class NTConnection {
   }
 
   void nt4Connect(String ipAddress) {
-    ntClient = NT4Client(
+    _ntClient = NT4Client(
       serverBaseAddress: ipAddress,
       schemaManager: schemaManager,
       onConnect: () {
@@ -64,13 +64,13 @@ class NTConnection {
     );
 
     // Allows all published topics to be announced
-    ntClient.subscribe(
+    _ntClient.subscribe(
       topic: '',
       options: const NT4SubscriptionOptions(topicsOnly: true),
     );
 
     // add all struct schemas to the schema manager
-    ntClient.subscribe(
+    _ntClient.subscribe(
       topic: '/.schema',
       options: const NT4SubscriptionOptions(all: true),
     );
@@ -105,19 +105,19 @@ class NTConnection {
   }
 
   void addTopicAnnounceListener(Function(NT4Topic topic) onAnnounce) {
-    ntClient.addTopicAnnounceListener(onAnnounce);
+    _ntClient.addTopicAnnounceListener(onAnnounce);
   }
 
   void removeTopicAnnounceListener(Function(NT4Topic topic) onAnnounce) {
-    ntClient.removeTopicAnnounceListener(onAnnounce);
+    _ntClient.removeTopicAnnounceListener(onAnnounce);
   }
 
   void addTopicUnannounceListener(Function(NT4Topic topic) onUnannounce) {
-    ntClient.addTopicUnannounceListener(onUnannounce);
+    _ntClient.addTopicUnannounceListener(onUnannounce);
   }
 
   void removeTopicUnannounceListener(Function(NT4Topic topic) onUnannounce) {
-    ntClient.removeTopicUnannounceListener(onUnannounce);
+    _ntClient.removeTopicUnannounceListener(onUnannounce);
   }
 
   Future<T?>? subscribeAndRetrieveData<T>(
@@ -157,16 +157,16 @@ class NTConnection {
     }
   }
 
-  Map<int, NT4Topic> announcedTopics() => ntClient.announcedTopics;
+  Map<int, NT4Topic> announcedTopics() => _ntClient.announcedTopics;
 
-  Stream<double> latencyStream() => ntClient.latencyStream();
+  Stream<double> latencyStream() => _ntClient.latencyStream();
 
   void changeIPAddress(String ipAddress) {
-    if (ntClient.serverBaseAddress == ipAddress) {
+    if (_ntClient.serverBaseAddress == ipAddress) {
       return;
     }
 
-    ntClient.setServerBaseAddreess(ipAddress);
+    _ntClient.setServerBaseAddreess(ipAddress);
   }
 
   NT4Subscription subscribe(String topic, [double period = 0.1]) =>
@@ -188,7 +188,7 @@ class NTConnection {
       return existingSubscription;
     }
 
-    NT4Subscription newSubscription = ntClient.subscribe(
+    NT4Subscription newSubscription = _ntClient.subscribe(
       topic: topic,
       options: options,
     );
@@ -213,7 +213,7 @@ class NTConnection {
 
   void unSubscribe(NT4Subscription subscription) {
     if (!subscriptionUseCount.containsKey(subscription)) {
-      ntClient.unSubscribe(subscription);
+      _ntClient.unSubscribe(subscription);
       return;
     }
 
@@ -224,32 +224,32 @@ class NTConnection {
     if (subscriptionUseCount[subscription]! <= 0) {
       subscriptionMap.remove(hashCode);
       subscriptionUseCount.remove(subscription);
-      ntClient.unSubscribe(subscription);
+      _ntClient.unSubscribe(subscription);
     }
   }
 
   NT4Topic? getTopicFromSubscription(NT4Subscription subscription) =>
-      ntClient.getTopicFromName(subscription.topic);
+      _ntClient.getTopicFromName(subscription.topic);
 
-  NT4Topic? getTopicFromName(String topic) => ntClient.getTopicFromName(topic);
+  NT4Topic? getTopicFromName(String topic) => _ntClient.getTopicFromName(topic);
 
   void publishTopic(NT4Topic topic) {
-    ntClient.publishTopic(topic);
+    _ntClient.publishTopic(topic);
   }
 
   NT4Topic publishNewTopic(
     String name,
     NT4Type type, {
     Map<String, dynamic> properties = const {},
-  }) => ntClient.publishNewTopic(name, type, properties);
+  }) => _ntClient.publishNewTopic(name, type, properties);
 
-  bool isTopicPublished(NT4Topic? topic) => ntClient.isTopicPublished(topic);
+  bool isTopicPublished(NT4Topic? topic) => _ntClient.isTopicPublished(topic);
 
   Object? getLastAnnouncedValue(String topic) =>
-      ntClient.lastAnnouncedValues[topic];
+      _ntClient.lastAnnouncedValues[topic];
 
   void unpublishTopic(NT4Topic topic) {
-    ntClient.unpublishTopic(topic);
+    _ntClient.unpublishTopic(topic);
   }
 
   void updateDataFromSubscription(
@@ -257,15 +257,15 @@ class NTConnection {
     dynamic data, [
     int? timestamp,
   ]) {
-    ntClient.addSampleFromName(subscription.topic, data, timestamp);
+    _ntClient.addSampleFromName(subscription.topic, data, timestamp);
   }
 
   void updateDataFromTopic(NT4Topic topic, dynamic data, [int? timestamp]) {
-    ntClient.addSample(topic, data, timestamp);
+    _ntClient.addSample(topic, data, timestamp);
   }
 
   @visibleForTesting
   void updateDataFromTopicName(String topic, dynamic data, [int? timestamp]) {
-    ntClient.addSampleFromName(topic, data, timestamp);
+    _ntClient.addSampleFromName(topic, data, timestamp);
   }
 }

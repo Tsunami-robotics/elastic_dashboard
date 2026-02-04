@@ -79,6 +79,8 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
   double _clickPositionOffsetX = 0;
   double _clickPositionOffsetY = 0;
 
+  String _onClickCommandTopic = '';
+
   final double _otherObjectSize = 0.55;
   final double _trajectoryPointSize = 0.08;
 
@@ -156,6 +158,11 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
     refresh();
   }
 
+  set onClickCommandTopic(String value) {
+    _onClickCommandTopic = value;
+    refresh();
+  }
+
   bool get showRobotOutsideWidget => _showRobotOutsideWidget;
 
   bool get enableFieldClicking => _enableFieldClicking;
@@ -164,6 +171,8 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
 
   double get clickPositionOffsetX => _clickPositionOffsetX;
   double get clickPositionOffsetY => _clickPositionOffsetY;
+
+  String get onClickCommandTopic => _onClickCommandTopic;
 
   double get otherObjectSize => _otherObjectSize;
 
@@ -355,6 +364,7 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
     String clickPositionName = 'ClickPos',
     double clickPositionOffsetX = 0,
     double clickPositionOffsetY = 0,
+    String onClickCommandTopic = '',
     super.period,
   }) : _showTrajectories = showTrajectories,
        _showOtherObjects = showOtherObjects,
@@ -368,6 +378,7 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
        _clickPositionName = clickPositionName,
        _clickPositionOffsetX = clickPositionOffsetX,
        _clickPositionOffsetY = clickPositionOffsetY,
+       _onClickCommandTopic = onClickCommandTopic,
        super() {
     _fieldGame = fieldGame ?? _fieldGame;
 
@@ -412,6 +423,8 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
 
     _clickPositionOffsetX = tryCast(jsonData['click_position_offset_x']) ?? _clickPositionOffsetX;
     _clickPositionOffsetY = tryCast(jsonData['click_position_offset_y']) ?? _clickPositionOffsetY;
+
+    _onClickCommandTopic = tryCast(jsonData['on_click_command_topic']) ?? _onClickCommandTopic;
 
     if (!FieldImages.hasField(_fieldGame)) {
       _fieldGame = _defaultGame;
@@ -487,6 +500,7 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
     'click_position_name': clickPositionName,
     'click_position_offset_x': clickPositionOffsetX,
     'click_position_offset_y': clickPositionOffsetY,
+    'on_click_command_topic': onClickCommandTopic,
   };
 
   @override
@@ -760,35 +774,55 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
         ),
       ],
     ),
-    Flexible(
-          child: DialogTextInput(
-            onSubmit: (value) {
-              double? newOffset = double.tryParse(value);
+    const SizedBox(height: 5),
+    Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+      Flexible(
+            child: DialogTextInput(
+              onSubmit: (value) {
+                double? newOffset = double.tryParse(value);
 
-              if (newOffset == null) {
-                return;
-              }
-              clickPositionOffsetX = newOffset;
-            },
-            formatter: TextFormatterBuilder.decimalTextFormatter(),
-            label: 'Click Offset X',
-            initialText: _clickPositionOffsetX.toString(),
+                if (newOffset == null) {
+                  return;
+                }
+                clickPositionOffsetX = newOffset;
+              },
+              formatter: TextFormatterBuilder.decimalTextFormatter(),
+              label: 'Click Offset X',
+              initialText: _clickPositionOffsetX.toString(),
+            ),
+          ),
+          Flexible(
+            child: DialogTextInput(
+              onSubmit: (value) {
+                double? newOffset = double.tryParse(value);
+
+                if (newOffset == null) {
+                  return;
+                }
+                clickPositionOffsetY = newOffset;
+              },
+              formatter: TextFormatterBuilder.decimalTextFormatter(),
+              label: 'Click Offset Y',
+              initialText: _clickPositionOffsetY.toString(),
+            ),
+          ),
+      ]
+    ),
+    const SizedBox(height: 5),
+    Row(
+      children: [
+        const SizedBox(width: 5),
+        Expanded(
+          child: DialogTextInput(
+            onSubmit: (value) => onClickCommandTopic = value,
+            initialText: onClickCommandTopic,
+            label: 'On Click Command Topic',
           ),
         ),
-        Flexible(
-          child: DialogTextInput(
-            onSubmit: (value) {
-              double? newOffset = double.tryParse(value);
-
-              if (newOffset == null) {
-                return;
-              }
-              clickPositionOffsetY = newOffset;
-            },
-            formatter: TextFormatterBuilder.decimalTextFormatter(),
-            label: 'Click Offset Y',
-            initialText: _clickPositionOffsetY.toString(),
-          ),
-        ),
+      ],
+    ),
   ];
 }
