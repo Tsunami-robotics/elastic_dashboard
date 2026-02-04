@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:elastic_dashboard/services/nt4_type.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dot_cast/dot_cast.dart';
@@ -282,6 +283,35 @@ class FieldWidget extends NTWidget {
     );
   }
 
+  void _handleFieldTap(FieldWidgetModel model, Offset screenPoint, double scaleReduction) {
+    
+    if(!model.enableFieldClicking) return;
+
+    final scenePoint = model.transformController.toScene(screenPoint);
+
+    var offsetX = model.clickPositionOffsetX;
+    var offsetY = model.clickPositionOffsetY;
+
+    final fieldX = ((scenePoint.dx / model.field.pixelsPerMeterHorizontal) - offsetX) / scaleReduction;
+    final fieldY = ((model.widgetSize!.height - scenePoint.dy) / model.field.pixelsPerMeterVertical - offsetY) / scaleReduction;
+    
+
+    _publishPoseToNT(model, fieldX, fieldY);
+  }
+
+  void _publishPoseToNT(FieldWidgetModel model, double x, double y, [double angle = 0.0]) {
+
+    final topicName = '${model.topic}/${model.clickPositionName}';
+
+    final topic = model.ntConnection.getTopicFromName(topicName) ??
+        model.ntConnection.publishNewTopic(
+          topicName,
+          NT4Type.array(NT4Type.double()),
+        );
+
+    model.ntConnection.ntClient.addSample(topic, [x, y, angle]);
+  }
+
   @override
   Widget build(BuildContext context) {
     FieldWidgetModel model = cast(context.watch<NTWidgetModel>());
@@ -345,9 +375,12 @@ class FieldWidget extends NTWidget {
           );
         }
 
+        final imageKey = GlobalKey();
+
         return Stack(
           children: [
             // Pannable field widget
+
             InteractiveViewer(
               transformationController: model.transformController,
               constrained: true,
@@ -381,7 +414,21 @@ class FieldWidget extends NTWidget {
                           SizedBox(
                             height: constraints.maxHeight,
                             width: constraints.maxWidth,
-                            child: model.field.fieldImage,
+                            child: GestureDetector(
+                              onTapDown: (details) {
+                                final box = imageKey.currentContext!.findRenderObject() as RenderBox;
+
+                                final pos = box.globalToLocal(details.globalPosition);
+                                
+                                _handleFieldTap(model, pos, scaleReduction);
+                              },
+                              child: Center(
+                                child: Container(
+                                  key: imageKey,
+                                  child: model.field.fieldImage,
+                                ),
+                              ),
+                            ),
                           ),
                           for (List<Offset> points in trajectoryPoints)
                             CustomPaint(
@@ -404,6 +451,7 @@ class FieldWidget extends NTWidget {
                 },
               ),
             ),
+            
             // Robot, trajectories overlay
             IgnorePointer(
               ignoring: true,

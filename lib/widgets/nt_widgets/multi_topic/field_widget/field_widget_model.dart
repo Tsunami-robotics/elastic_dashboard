@@ -19,6 +19,8 @@ import 'package:elastic_dashboard/widgets/nt_widgets/nt_widget.dart';
 
 enum FieldObjectType { robot, trajectory, otherObject }
 
+
+
 class FieldObject {
   FieldObjectType type;
   Pose2dStruct? pose;
@@ -69,6 +71,13 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
   Color _trajectoryColor = Colors.white;
 
   bool _showRobotOutsideWidget = true;
+
+  bool _enableFieldClicking = true;
+
+  String _clickPositionName = '';
+
+  double _clickPositionOffsetX = 0;
+  double _clickPositionOffsetY = 0;
 
   final double _otherObjectSize = 0.55;
   final double _trajectoryPointSize = 0.08;
@@ -127,7 +136,34 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
     refresh();
   }
 
+  set enableFieldClicking(bool value) {
+    _enableFieldClicking = value;
+    refresh();
+  }
+
+  set clickPositionName(String value) {
+    _clickPositionName = value;
+    refresh();
+  }
+
+  set clickPositionOffsetX(double value) {
+    _clickPositionOffsetX = value;
+    refresh();
+  }
+
+  set clickPositionOffsetY(double value) {
+    _clickPositionOffsetY = value;
+    refresh();
+  }
+
   bool get showRobotOutsideWidget => _showRobotOutsideWidget;
+
+  bool get enableFieldClicking => _enableFieldClicking;
+
+  String get clickPositionName => _clickPositionName;
+
+  double get clickPositionOffsetX => _clickPositionOffsetX;
+  double get clickPositionOffsetY => _clickPositionOffsetY;
 
   double get otherObjectSize => _otherObjectSize;
 
@@ -315,6 +351,10 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
     Color robotColor = Colors.red,
     Color trajectoryColor = Colors.white,
     bool showRobotOutsideWidget = true,
+    bool enableFieldClicking = true,
+    String clickPositionName = 'ClickPos',
+    double clickPositionOffsetX = 0,
+    double clickPositionOffsetY = 0,
     super.period,
   }) : _showTrajectories = showTrajectories,
        _showOtherObjects = showOtherObjects,
@@ -324,6 +364,10 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
        _robotColor = robotColor,
        _trajectoryColor = trajectoryColor,
        _showRobotOutsideWidget = showRobotOutsideWidget,
+       _enableFieldClicking = enableFieldClicking,
+       _clickPositionName = clickPositionName,
+       _clickPositionOffsetX = clickPositionOffsetX,
+       _clickPositionOffsetY = clickPositionOffsetY,
        super() {
     _fieldGame = fieldGame ?? _fieldGame;
 
@@ -361,6 +405,13 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
 
     _showRobotOutsideWidget =
         tryCast(jsonData['show_robot_outside_widget']) ?? true;
+
+    _enableFieldClicking = tryCast(jsonData['enable_field_clicking']) ?? _enableFieldClicking;
+
+    _clickPositionName = tryCast(jsonData['click_position_name']) ?? _clickPositionName;
+
+    _clickPositionOffsetX = tryCast(jsonData['click_position_offset_x']) ?? _clickPositionOffsetX;
+    _clickPositionOffsetY = tryCast(jsonData['click_position_offset_y']) ?? _clickPositionOffsetY;
 
     if (!FieldImages.hasField(_fieldGame)) {
       _fieldGame = _defaultGame;
@@ -432,6 +483,10 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
     'robot_color': robotColor.toARGB32(),
     'trajectory_color': trajectoryColor.toARGB32(),
     'show_robot_outside_widget': showRobotOutsideWidget,
+    'enable_field_clicking': enableFieldClicking,
+    'click_position_name': clickPositionName,
+    'click_position_offset_x': clickPositionOffsetX,
+    'click_position_offset_y': clickPositionOffsetY,
   };
 
   @override
@@ -673,5 +728,67 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
         ),
       ],
     ),
+    const SizedBox(height: 5),
+    Row(
+      children: [
+        Tooltip(
+          waitDuration: const Duration(milliseconds: 100),
+          message:
+              'If turned on, clicking on the field will publish a pose onto it\nwith the name selected in the option below',
+          child: Icon(Icons.help),
+        ),
+        const SizedBox(width: 5),
+        Expanded(
+          child: DialogToggleSwitch(
+            onToggle: (value) => enableFieldClicking = value,
+            initialValue: enableFieldClicking,
+            label: 'Enable Field Clicking',
+          ),
+        ),
+      ],
+    ),
+    const SizedBox(height: 5),
+    Row(
+      children: [
+        const SizedBox(width: 5),
+        Expanded(
+          child: DialogTextInput(
+            onSubmit: (value) => clickPositionName = value,
+            initialText: clickPositionName,
+            label: 'Click Position name',
+          ),
+        ),
+      ],
+    ),
+    Flexible(
+          child: DialogTextInput(
+            onSubmit: (value) {
+              double? newOffset = double.tryParse(value);
+
+              if (newOffset == null) {
+                return;
+              }
+              clickPositionOffsetX = newOffset;
+            },
+            formatter: TextFormatterBuilder.decimalTextFormatter(),
+            label: 'Click Offset X',
+            initialText: _clickPositionOffsetX.toString(),
+          ),
+        ),
+        Flexible(
+          child: DialogTextInput(
+            onSubmit: (value) {
+              double? newOffset = double.tryParse(value);
+
+              if (newOffset == null) {
+                return;
+              }
+              clickPositionOffsetY = newOffset;
+            },
+            formatter: TextFormatterBuilder.decimalTextFormatter(),
+            label: 'Click Offset Y',
+            initialText: _clickPositionOffsetY.toString(),
+          ),
+        ),
   ];
 }
