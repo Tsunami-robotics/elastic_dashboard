@@ -2,3 +2,5 @@
 
 current added features:
 - fields now support publishing click positions onto networktables and notifying via commands
+
+full readme at https://github.com/Gold872/elastic_dashboard
