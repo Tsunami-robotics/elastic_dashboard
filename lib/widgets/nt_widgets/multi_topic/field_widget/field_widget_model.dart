@@ -299,6 +299,7 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
               objects.add(
                 FieldObject(type: FieldObjectType.otherObject, pose: pose),
               );
+            
             }
           } else {
             Pose2dStruct pose = Pose2dStruct.valueFromBytes(
@@ -322,16 +323,18 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
               i,
               i + 3,
             );
-            objects.add(
-              FieldObject(
-                type: FieldObjectType.otherObject,
-                pose: Pose2dStruct(
-                  x: positionArray[0],
-                  y: positionArray[1],
-                  angle: radians(positionArray[2]),
+            if(!objectSubscription.topic.endsWith(clickPositionName)){
+              objects.add(
+                FieldObject(
+                  type: FieldObjectType.otherObject,
+                  pose: Pose2dStruct(
+                    x: positionArray[0],
+                    y: positionArray[1],
+                    angle: radians(positionArray[2]),
+                  ),
                 ),
-              ),
-            );
+              );
+            }
           }
         }
       }
