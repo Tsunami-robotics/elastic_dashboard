@@ -66,7 +66,7 @@ class FieldWidget extends NTWidget {
       decoration: BoxDecoration(
         color: Colors.black.withValues(alpha: 0.35),
         border: Border.all(
-          color: model.robotColor,
+          color: object.type == FieldObjectType.otherObject ? model.otherObjectsColor : model.robotColor,
           width: 0.125 * min(width, length),
         ),
       ),

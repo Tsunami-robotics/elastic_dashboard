@@ -69,6 +69,7 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
 
   Color _robotColor = Colors.red;
   Color _trajectoryColor = Colors.white;
+  Color _otherObjectsColor = Colors.blue;
 
   bool _showRobotOutsideWidget = true;
 
@@ -130,6 +131,13 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
 
   set trajectoryColor(Color value) {
     _trajectoryColor = value;
+    refresh();
+  }
+
+  Color get otherObjectsColor => _otherObjectsColor;
+
+  set otherObjectsColor(Color value) {
+    _otherObjectsColor = value;
     refresh();
   }
 
@@ -362,6 +370,7 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
     double fieldRotation = 0.0,
     Color robotColor = Colors.red,
     Color trajectoryColor = Colors.white,
+    Color otherObjectsColor = Colors.blue,
     bool showRobotOutsideWidget = true,
     bool enableFieldClicking = true,
     String clickPositionName = 'ClickPos',
@@ -376,6 +385,7 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
        _fieldRotation = fieldRotation,
        _robotColor = robotColor,
        _trajectoryColor = trajectoryColor,
+       _otherObjectsColor = otherObjectsColor,
        _showRobotOutsideWidget = showRobotOutsideWidget,
        _enableFieldClicking = enableFieldClicking,
        _clickPositionName = clickPositionName,
@@ -415,6 +425,10 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
     );
     _trajectoryColor = Color(
       tryCast(jsonData['trajectory_color']) ?? Colors.white.toARGB32(),
+    );
+
+    _otherObjectsColor = Color(
+      tryCast(jsonData['other_object_color']) ?? Colors.blue.toARGB32(),
     );
 
     _showRobotOutsideWidget =
@@ -498,6 +512,7 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
     'field_rotation': _fieldRotation,
     'robot_color': robotColor.toARGB32(),
     'trajectory_color': trajectoryColor.toARGB32(),
+    'other_object_color': otherObjectsColor.toARGB32(),
     'show_robot_outside_widget': showRobotOutsideWidget,
     'enable_field_clicking': enableFieldClicking,
     'click_position_name': clickPositionName,
@@ -721,6 +736,26 @@ class FieldWidgetModel extends MultiTopicNTWidgetModel {
               label: 'Trajectory Color',
               initialColor: trajectoryColor,
               defaultColor: Colors.white,
+            ),
+          ),
+        ),
+      ],
+    ),
+    const SizedBox(height: 5),
+    Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            child: DialogColorPicker(
+              onColorPicked: (color) {
+                otherObjectsColor = color;
+              },
+              label: 'Other Objects Color',
+              initialColor: otherObjectsColor,
+              defaultColor: Colors.blue,
             ),
           ),
         ),
